@@ -2,7 +2,7 @@
 Expose the state of one or more tcp ports over http. Return HTTP Status 200 if all ports are open or HTTP Status 500 if one or more ports are not.
 
 ```
- env HOST=the-hostname-to-check.tld PORTS="443,22" go run main.go
+ env CHECKHOST=the-hostname-to-check.tld PORTS="443,22" go run main.go
 ```
 
 If all the ports on the-hostname-to-check.tld are open we get `OK`
