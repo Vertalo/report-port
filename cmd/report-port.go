@@ -39,13 +39,12 @@ func ports_check(c rune) bool {
 
 func (sh *StatusHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	sh.status = raw_connect(sh.host, sh.ports)
+    w.Header().Set("Connection", "close")
 	if sh.status {
 		w.WriteHeader(http.StatusOK)
-		w.Header().Set("Content-Type", "application/json")
 		fmt.Fprintln(w, "OK")
 	} else {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Header().Set("Content-Type", "application/json")
 		fmt.Fprintln(w, "NOT OK")
 	}
 }
@@ -69,5 +68,6 @@ func main() {
 
 	sh := &StatusHandler{status: false, host: checkenv("CHECKHOST"), ports: strings.FieldsFunc(checkenv("PORTS"), ports_check)}
 	http.Handle("/", sh)
+    log.Println("Server starting...")
 	log.Fatal(http.ListenAndServe(getenv("LISTEN", "")+":"+getenv("PORT", "8080"), nil))
 }
